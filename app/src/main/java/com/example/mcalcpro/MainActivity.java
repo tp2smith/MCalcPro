@@ -15,7 +15,7 @@ import java.util.Locale;
 
 import ca.roumani.i2c.MPro;
 
-public abstract class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener, SensorEventListener {
+public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener, SensorEventListener {
     private TextToSpeech tts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public abstract class MainActivity extends AppCompatActivity implements TextToSp
 
     }
 
-    public abstract void onInit(int initStatus);
+    public void onInit(int initStatus)
     {
         this.tts.setLanguage(Locale.US);
     }
@@ -65,7 +65,7 @@ public abstract class MainActivity extends AppCompatActivity implements TextToSp
         double ay = event.values[1];
         double az = event.values[2];
 
-        if ((ax*ax + ay*ay + az*az) > 20) {
+        if (Math.sqrt(ax*ax + ay*ay + az*az) > 10) {
             ((EditText) findViewById(R.id.pBox)).setText("");
             ((EditText) findViewById(R.id.aBox)).setText("");
             ((EditText) findViewById(R.id.iBox)).setText("");
