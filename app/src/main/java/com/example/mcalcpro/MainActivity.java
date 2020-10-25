@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         double ax = event.values[0];
         double ay = event.values[1];
         double az = event.values[2];
-
-        if (Math.sqrt(ax*ax + ay*ay + az*az) > 10) {
+        double a = Math.sqrt(ax*ax + ay*ay + az*az);
+        if (a > 20) {
             ((EditText) findViewById(R.id.pBox)).setText("");
             ((EditText) findViewById(R.id.aBox)).setText("");
             ((EditText) findViewById(R.id.iBox)).setText("");
