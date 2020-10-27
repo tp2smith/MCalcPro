@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         this.tts = new TextToSpeech(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void buttonClicked(View v) {
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         double ay = event.values[1];
         double az = event.values[2];
         double a = Math.sqrt(ax*ax + ay*ay + az*az);
-        if (a > 20) {
+        if (a > 10) {
             ((EditText) findViewById(R.id.pBox)).setText("");
             ((EditText) findViewById(R.id.aBox)).setText("");
             ((EditText) findViewById(R.id.iBox)).setText("");
