@@ -11,6 +11,7 @@ import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -29,29 +30,40 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     public void buttonClicked(View v) {
 
-        MPro mp = new MPro();
-        String princS = ((EditText) findViewById(R.id.pBox)).getText().toString();
-        double princD = Double.parseDouble(princS);
-        mp.setPrinciple(princS);
-        String amorS = ((EditText) findViewById(R.id.aBox)).getText().toString();
-        mp.setAmortization(amorS);
-        int amorD = Integer.parseInt(amorS);
-        String intS = ((EditText) findViewById(R.id.iBox)).getText().toString();
-        mp.setInterest(intS);
-        double intD = Double.parseDouble(intS);
-        String s = "Monthly Payment = " + mp.computePayment("%,.2f");
-        s += "\n\n";
-        s += "By making this payment monthly for " + amorD;
-        s += " years, the mortgage will be paid in full. " +
-                "But if you terminate the mortgage on its nth anniversary, " +
-                "the balance still owing depends on n as shown below: \n\n";
-        for (int i = 0; i <= amorD; i++) {
-            s+= String.format("%8d",i) + mp.outstandingAfter(i,"%,16.0f");
-            s+= "\n\n";
-            i = (i >= 5) ? i + 4 : i;
+        try
+        {
+
+            MPro mp = new MPro();
+            String princS = ((EditText) findViewById(R.id.pBox)).getText().toString();
+            double princD = Double.parseDouble(princS);
+            mp.setPrinciple(princS);
+            String amorS = ((EditText) findViewById(R.id.aBox)).getText().toString();
+            mp.setAmortization(amorS);
+            int amorD = Integer.parseInt(amorS);
+            String intS = ((EditText) findViewById(R.id.iBox)).getText().toString();
+            mp.setInterest(intS);
+            double intD = Double.parseDouble(intS);
+            String s = "Monthly Payment = " + mp.computePayment("%,.2f");
+            s += "\n\n";
+            s += "By making this payment monthly for " + amorD;
+            s += " years, the mortgage will be paid in full. " +
+                    "But if you terminate the mortgage on its nth anniversary, " +
+                    "the balance still owing depends on n as shown below: \n\n";
+            for (int i = 0; i <= amorD; i++) {
+                s+= String.format("%8d",i) + mp.outstandingAfter(i,"%,16.0f");
+                s+= "\n\n";
+                i = (i >= 5) ? i + 4 : i;
+            }
+            ((TextView) findViewById(R.id.output)).setText(s);
+            tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
         }
-        ((TextView) findViewById(R.id.output)).setText(s);
-        tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+
+        catch (Exception e)
+        {
+            String msg = e.getMessage();
+            Toast label = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+            label.show();
+        }
 
     }
 
